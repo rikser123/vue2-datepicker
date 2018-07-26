@@ -2,20 +2,10 @@ export default {
   name: 'panelYear',
   props: {
     value: null,
-    firstYear: Number,
-    disabledYear: Function
+    firstYear: Number
   },
   methods: {
-    isDisabled (year) {
-      if (typeof this.disabledYear === 'function' && this.disabledYear(year)) {
-        return true
-      }
-      return false
-    },
     selectYear (year) {
-      if (this.isDisabled(year)) {
-        return
-      }
       this.$emit('select', year)
     }
   },
@@ -28,8 +18,7 @@ export default {
       return <span
         class={{
           'cell': true,
-          'actived': currentYear === year,
-          'disabled': this.isDisabled(year)
+          'actived': currentYear === year
         }}
         onClick={this.selectYear.bind(this, year)}
       >{year}</span>

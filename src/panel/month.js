@@ -7,20 +7,10 @@ export default {
     value: null,
     calendarYear: {
       default: new Date().getFullYear()
-    },
-    disabledMonth: Function
+    }
   },
   methods: {
-    isDisabled (month) {
-      if (typeof this.disabledMonth === 'function' && this.disabledMonth(month)) {
-        return true
-      }
-      return false
-    },
     selectMonth (month) {
-      if (this.isDisabled(month)) {
-        return
-      }
       this.$emit('select', month)
     }
   },
@@ -32,8 +22,7 @@ export default {
       return <span
         class={{
           'cell': true,
-          'actived': currentYear === this.calendarYear && currentMonth === i,
-          'disabled': this.isDisabled(i)
+          'actived': currentYear === this.calendarYear && currentMonth === i
         }}
         onClick={this.selectMonth.bind(this, i)}>
         {v}

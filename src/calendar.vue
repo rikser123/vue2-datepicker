@@ -18,16 +18,13 @@
         class="mx-icon-next-month"
         @click="handleIconMonth(1)">&rsaquo;</a>
       <a
-        v-show="panel === 'DATE'"
+        v-show="panel !== 'TIME'"
         class="mx-current-month"
         @click="handleBtnMonth">{{months[calendarMonth]}}</a>
       <a
-        v-show="panel === 'DATE' || panel === 'MONTH'"
+        v-show="panel !== 'TIME'"
         class="mx-current-year"
         @click="handleBtnYear">{{calendarYear}}</a>
-      <a
-        v-show="panel === 'YEAR'"
-        class="mx-current-year">{{yearHeader}}</a>
       <a
         v-show="panel === 'TIME'"
         class="mx-time-header"
@@ -47,13 +44,11 @@
       <panel-year
         v-show="panel === 'YEAR'"
         :value="value"
-        :disabled-year="isDisabledYear"
         :first-year="firstYear"
         @select="selectYear" />
       <panel-month
         v-show="panel === 'MONTH'"
         :value="value"
-        :disabled-month="isDisabledMonth"
         :calendar-year="calendarYear"
         @select="selectMonth" />
       <panel-time
@@ -97,7 +92,7 @@ export default {
     // below user set
     type: {
       type: String,
-      default: 'date' // ['date', 'datetime'] zendy added 'month', 'year'
+      default: 'date' // ['date', 'datetime']
     },
     firstDayOfWeek: {
       default: 7,
@@ -161,9 +156,6 @@ export default {
     timeHeader () {
       return this.value && new Date(this.value).toLocaleDateString()
     },
-    yearHeader () {
-      return this.firstYear + ' ~ ' + (this.firstYear + 10)
-    },
     months () {
       return this.t('months')
     }
@@ -195,13 +187,7 @@ export default {
       }
     },
     init () {
-      if (this.type.toLowerCase() === 'month') {
-        this.panel = 'MONTH'
-      } else if (this.type.toLowerCase() === 'year') {
-        this.panel = 'YEAR'
-      } else {
-        this.panel = 'DATE'
-      }
+      this.panel = 'DATE'
       this.updateNow(this.value)
     },
     // 根据value更新日历
@@ -232,15 +218,8 @@ export default {
       } else if (typeof this.disabledDays === 'function') {
         disabledDays = this.disabledDays(new Date(date))
       }
+
       return notBefore || notAfter || disabledDays || startAt || endAt
-    },
-    isDisabledYear (year) {
-      const date = new Date(year, this.calendarMonth)
-      return this.isDisabledDate(date)
-    },
-    isDisabledMonth (month) {
-      const date = new Date(this.calendarYear, month)
-      return this.isDisabledDate(date)
     },
     selectDate (date) {
       if (this.type === 'datetime') {
@@ -269,16 +248,10 @@ export default {
     },
     selectYear (year) {
       this.changeCalendarYear(year)
-      if (this.type.toLowerCase() === 'year') {
-        return this.selectDate(new Date(this.now))
-      }
       this.showPanelMonth()
     },
     selectMonth (month) {
       this.changeCalendarMonth(month)
-      if (this.type.toLowerCase() === 'month') {
-        return this.selectDate(new Date(this.now))
-      }
       this.showPanelDate()
     },
     selectTime (time) {
@@ -301,10 +274,18 @@ export default {
       }
     },
     handleBtnYear () {
-      this.showPanelYear()
+      if (this.panel === 'YEAR') {
+        this.showPanelDate()
+      } else {
+        this.showPanelYear()
+      }
     },
     handleBtnMonth () {
-      this.showPanelMonth()
+      if (this.panel === 'MONTH') {
+        this.showPanelDate()
+      } else {
+        this.showPanelMonth()
+      }
     },
     changePanelYears (flag) {
       this.firstYear = this.firstYear + flag * 10

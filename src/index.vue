@@ -8,39 +8,10 @@
     :style="{
       'width': computedWidth
     }"
-    v-clickoutside="closePopup">
+    v-click-outside="closePopup">
     <div class="mx-input-wrapper"
-      @click="showPopup">
-      <input
-        :class="inputClass"
-        ref="input"
-        type="text"
-        :name="inputName"
-        :disabled="disabled"
-        :readonly="!editable"
-        :value="text"
-        :placeholder="innerPlaceholder"
-        @input="handleInput"
-        @change="handleChange">
-      <span class="mx-input-append">
-        <slot name="calendar-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 200" class="mx-calendar-icon">
-            <rect x="13" y="29" rx="14" ry="14" width="174" height="158" fill="transparent" />
-            <line x1="46" x2="46" y1="8" y2="50" />
-            <line x1="154" x2="154" y1="8" y2="50" />
-            <line x1="13" x2="187" y1="70" y2="70" />
-            <text x="50%" y="135" font-size="90" stroke-width="1" text-anchor="middle" dominant-baseline="middle">{{new Date().getDate()}}</text>
-          </svg>
-        </slot>
-      </span>
-      <span
-        v-if="showClearIcon"
-        class="mx-input-append mx-clear-wrapper"
-        @click.stop="clearDate">
-        <slot name="mx-clear-icon">
-          <i class="mx-input-icon mx-clear-icon"></i>
-        </slot>
-      </span>
+      @click="togglePopup">
+      <slot name="input-group"></slot>
     </div>
     <div class="mx-datepicker-popup"
       :style="position"
@@ -98,11 +69,13 @@
 
 <script>
 import fecha from 'fecha'
-import clickoutside from '@/directives/clickoutside'
 import { isValidDate, isValidRange, isDateObejct, isPlainObject } from '@/utils/index'
 import CalendarPanel from './calendar.vue'
 import locale from '@/mixins/locale'
 import Languages from '@/locale/languages'
+
+
+let funcWrap = null
 
 export default {
   fecha,
@@ -110,7 +83,19 @@ export default {
   components: { CalendarPanel },
   mixins: [locale],
   directives: {
-    clickoutside
+      clickOutside: {
+          bind(el, binding, vnode) {
+              document.body.addEventListener('click', funcWrap = function(event)  {
+                  if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER') {
+                      vnode.context[binding.expression](event);
+                      vnode.context.$emit('clickoutside');
+                  }
+              })
+          },
+          unbind(el) {
+              document.body.removeEventListener('click', funcWrap);
+          }
+      }
   },
   props: {
     value: null,
@@ -314,15 +299,11 @@ export default {
       this.closePopup()
     },
     updateDate (confirm = false) {
-      if ((this.confirm && !confirm) || this.disabled) {
-        return false
-      }
-      const equal = this.range ? this.rangeEqual(this.value, this.currentValue) : this.dateEqual(this.value, this.currentValue)
-      if (equal) {
-        return false
-      }
+
       this.$emit('input', this.currentValue)
-      this.$emit('change', this.currentValue)
+      this.$emit('change', this.currentValue);
+      const strDate = this.stringify(this.currentValue, this.format);
+      this.$emit('dateupdated', {format: strDate, value: this.currentValue});
       return true
     },
     handleValueChange (value) {
@@ -358,11 +339,11 @@ export default {
     selectEndTime (time) {
       this.selectEndDate(time)
     },
-    showPopup () {
-      if (this.disabled) {
+    togglePopup (event) {
+      if (this.disabled || event.target.classList.contains('datepicker__field__button--clear')) {
         return
       }
-      this.popupVisible = true
+      this.popupVisible = !this.popupVisible;
     },
     closePopup () {
       this.popupVisible = false
@@ -426,6 +407,9 @@ export default {
         this.$emit('input-error', value)
       }
     }
-  }
+  },
+    mounted() {
+        this.updateDate(true);
+    },
 }
 </script>
