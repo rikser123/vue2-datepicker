@@ -1,22 +1,26 @@
 <template>
   <div class="mx-calendar">
     <div class="mx-calendar-header">
-      <a
+      <button
+        type="button"
         v-show="panel !== 'TIME'"
         class="mx-icon-last-year"
-        @click="handleIconYear(-1)">&laquo;</a>
-      <a
+        @click="handleIconYear(-1)"></button>
+      <button
+        type="button"
         v-show="panel === 'DATE'"
         class="mx-icon-last-month"
-        @click="handleIconMonth(-1)">&lsaquo;</a>
-      <a
+        @click="handleIconMonth(-1)"></button>
+      <button
+        type="button"
         v-show="panel !== 'TIME'"
         class="mx-icon-next-year"
-        @click="handleIconYear(1)">&raquo;</a>
-      <a
+        @click="handleIconYear(1)"></button>
+      <button
+        type="button"
         v-show="panel === 'DATE'"
         class="mx-icon-next-month"
-        @click="handleIconMonth(1)">&rsaquo;</a>
+        @click="handleIconMonth(1)"></button>
       <a
         v-show="panel !== 'TIME'"
         class="mx-current-month"
