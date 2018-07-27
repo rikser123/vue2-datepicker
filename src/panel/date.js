@@ -116,7 +116,7 @@ export default {
         }
         return (
           <td
-            class="cell"
+            class="mx-cell"
             {...attrs}
             title={this.getCellTitle(date)}
             onClick={this.selectDate.bind(this, date)}>
