@@ -17,7 +17,7 @@ export default {
       const year = firstYear + i
       return <span
         class={{
-          'cell': true,
+          'mx-cell': true,
           'actived': currentYear === year
         }}
         onClick={this.selectYear.bind(this, year)}

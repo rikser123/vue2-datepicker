@@ -86,7 +86,7 @@ export default {
           <li
             class={{
               'mx-time-picker-item': true,
-              'cell': true,
+              'mx-cell': true,
               'actived': pickHours === this.currentHours && pickMinutes === this.currentMinutes,
               'disabled': disabledTime && disabledTime(time)
             }}
@@ -106,7 +106,7 @@ export default {
       const time = new Date(date).setHours(i)
       return <li
         class={{
-          'cell': true,
+          'mx-cell': true,
           'actived': i === this.currentHours,
           'disabled': disabledTime && disabledTime(time)
         }}
@@ -121,7 +121,7 @@ export default {
       const time = new Date(date).setMinutes(value)
       return <li
         class={{
-          'cell': true,
+          'mx-cell': true,
           'actived': value === this.currentMinutes,
           'disabled': disabledTime && disabledTime(time)
         }}
@@ -133,7 +133,7 @@ export default {
       const time = new Date(date).setSeconds(i)
       return <li
         class={{
-          'cell': true,
+          'mx-cell': true,
           'actived': i === this.currentSeconds,
           'disabled': disabledTime && disabledTime(time)
         }}

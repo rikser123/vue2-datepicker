@@ -21,7 +21,7 @@ export default {
     months = months.map((v, i) => {
       return <span
         class={{
-          'cell': true,
+          'mx-cell': true,
           'actived': currentYear === this.calendarYear && currentMonth === i
         }}
         onClick={this.selectMonth.bind(this, i)}>

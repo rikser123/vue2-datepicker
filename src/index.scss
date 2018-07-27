@@ -214,7 +214,7 @@ $primary-color: #1284e7;
 .mx-calendar-content {
   width: 32px * 7;
   height: 32px * 7;
-  .cell {
+  .mx-cell {
     cursor: pointer;
     &:hover {
       background-color: #eaf8fe;
@@ -265,7 +265,7 @@ $primary-color: #1284e7;
 
 .mx-panel-year {
   padding: 7px 0;
-  .cell {
+  .mx-cell {
     display: inline-block;
     width: 40%;
     margin: 1px 5%;
@@ -274,7 +274,7 @@ $primary-color: #1284e7;
 }
 
 .mx-panel-month {
-  .cell {
+  .mx-cell {
     display: inline-block;
     width: 30%;
     line-height: 40px;
@@ -301,7 +301,7 @@ $primary-color: #1284e7;
   &:first-child {
     border-left: 0;
   }
-  .cell {
+  .mx-cell {
     width: 100%;
     font-size: 12px;
     height: 30px;
