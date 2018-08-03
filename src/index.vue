@@ -86,18 +86,19 @@ export default {
       clickOutside: {
           bind(el, binding, vnode) {
              document.body.addEventListener('click', funcWrap = function(event)  {
-                  if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER' && !el.contains(event.target) && !event.target.closest(".mx-datepicker")) {
+             console.log(event);
+                  if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER' && !el.contains(event.target) && !event.target.closest(".mx-datepicker") && !event.target.classList.contains('mx-datepicker')) {
                       vnode.context[binding.expression](event);
                       vnode.context.$emit('clickoutside');
                   }
-              })
+              }, true)
           },
           unbind(el) {
-              document.body.removeEventListener('click', funcWrap);
+              document.body.removeEventListener('click', funcWrap, true);
           }
       }
   },
-  props: {
+  props: {                                                                                                                                                                 
     value: null,
     placeholder: {
       type: String,
@@ -313,7 +314,7 @@ export default {
         this.currentValue = isValidRange(value) ? [new Date(value[0]), new Date(value[1])] : [null, null]
       }
     },
-    selectDate (date) {
+    selectDate (date) {  
       this.currentValue = date
       this.updateDate() && this.closePopup()
     },
@@ -342,7 +343,7 @@ export default {
     togglePopup (event) {
       if (this.disabled || event.target.classList.contains('datepicker__field__button--clear')) {
         return
-      }
+      }              
       this.popupVisible = !this.popupVisible;
     },
     closePopup () {
