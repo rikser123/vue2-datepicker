@@ -85,8 +85,7 @@ export default {
   directives: {
       clickOutside: {
           bind(el, binding, vnode) {
-             document.body.addEventListener('click', funcWrap = function(event)  {
-             console.log(event);
+             document.body.addEventListener('click', funcWrap = function(event)  {           
                   if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER' && !el.contains(event.target) && !event.target.closest(".mx-datepicker") && !event.target.classList.contains('mx-datepicker')) {
                       vnode.context[binding.expression](event);
                       vnode.context.$emit('clickoutside');
