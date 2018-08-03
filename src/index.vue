@@ -81,12 +81,12 @@ export default {
   fecha,
   name: 'DatePicker',
   components: { CalendarPanel },
-  mixins: [locale],
+  mixins: [locale],                                     
   directives: {
       clickOutside: {
           bind(el, binding, vnode) {
-              document.body.addEventListener('click', funcWrap = function(event)  {
-                  if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER') {
+             document.body.addEventListener('click', funcWrap = function(event)  {
+                  if (el.classList.contains('mx-datepicker') && event.target.nodeName !== 'EJ-DATEPICKER' && !el.contains(event.target) && !event.target.closest(".mx-datepicker")) {
                       vnode.context[binding.expression](event);
                       vnode.context.$emit('clickoutside');
                   }
